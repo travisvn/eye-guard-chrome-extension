@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Toggle Checkbox Base */
+.toggle-checkbox:checked {
+  right: 0;
+  border-color: #34d399; /* Tailwind green-400 */
+}
+
+.toggle-checkbox:checked + .toggle-label {
+  background-color: #34d399; /* Tailwind green-400 */
+}
+
+/* Toggle Animation */
+.toggle-checkbox {
+  right: 1rem;
+  transition: all 0.3s ease-in-out;
+}
+
+.toggle-label {
+  transition: background-color 0.3s ease-in-out;
+}
