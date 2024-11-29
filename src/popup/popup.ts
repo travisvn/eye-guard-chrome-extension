@@ -4,9 +4,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const colorPicker = document.getElementById('colorPicker') as HTMLInputElement;
   const resetColorButton = document.getElementById('resetColor') as HTMLButtonElement;
   const toggleExtension = document.getElementById('toggleExtension') as HTMLInputElement;
+
   const excludedSites = document.getElementById('excludedSites') as HTMLTextAreaElement;
   const saveSitesButton = document.getElementById('saveSites') as HTMLButtonElement;
   const addCurrentSiteButton = document.getElementById('addCurrentSite') as HTMLButtonElement;
+
+  const aggressiveModeSites = document.getElementById('aggressiveModeSites') as HTMLTextAreaElement;
+  const saveSitesAggressiveModeButton = document.getElementById('saveSitesAggressiveMode') as HTMLButtonElement;
+  const addCurrentSiteAggressiveModeButton = document.getElementById('addCurrentSiteAggressiveMode') as HTMLButtonElement;
+
   const status = document.getElementById('status') as HTMLParagraphElement;
 
   const darkModeToggle = document.getElementById('darkModeToggle');
@@ -49,10 +55,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const DEFAULT_COLOR = '#cce8cf'; // Default seafoam green color
 
-  chrome.storage.sync.get(['color', 'enabled', 'excludedSites'], (data) => {
+  chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites'], (data) => {
     colorPicker.value = data.color || DEFAULT_COLOR;
     toggleExtension.checked = data.enabled ?? true;
     excludedSites.value = (data.excludedSites || []).join('\n');
+    aggressiveModeSites.value = (data.aggressiveModeSites || []).join('\n');
   });
 
   // Update the color
@@ -98,6 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.set({ excludedSites: Array.from(sites) }, () => {
           excludedSites.value = Array.from(sites).join('\n');
           status.textContent = 'Current site added to ignore list!';
+          setTimeout(() => (status.textContent = ''), 1000);
+        });
+      });
+    });
+  });
+
+  saveSitesAggressiveModeButton.addEventListener('click', () => {
+    const sites = aggressiveModeSites.value.split('\n').map((site) => site.trim()).filter(Boolean);
+    chrome.storage.sync.set({ aggressiveModeSites: sites }, () => {
+      status.textContent = 'Aggressive mode sites updated!';
+      setTimeout(() => (status.textContent = ''), 1000);
+    });
+  });
+
+  addCurrentSiteAggressiveModeButton.addEventListener('click', () => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      if (!tabs.length || !tabs[0].url) return;
+
+      const baseUrl = new URL(tabs[0].url).origin;
+      chrome.storage.sync.get(['aggressiveModeSites'], (data) => {
+        const sites = new Set(data.aggressiveModeSites || []);
+        sites.add(baseUrl);
+        chrome.storage.sync.set({ aggressiveModeSites: Array.from(sites) }, () => {
+          aggressiveModeSites.value = Array.from(sites).join('\n');
+          status.textContent = 'Current site added to aggressive mode!';
           setTimeout(() => (status.textContent = ''), 1000);
         });
       });
