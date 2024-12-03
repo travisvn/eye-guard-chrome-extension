@@ -1,8 +1,9 @@
-chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites'], (data) => {
+chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode'], (data) => {
   const userColor = data.color || '#cce8cf';
   const isEnabled = data.enabled ?? true;
   const excludedSites = data.excludedSites || [];
   const aggressiveModeSites = data.aggressiveModeSites || [];
+  const alwaysOnAggressiveMode = data.alwaysOnAggressiveMode ?? false;
 
   if (!isEnabled || excludedSites.some((site) => window.location.href.includes(site))) {
     console.log('Eye Guard is disabled or this site is excluded.');
@@ -10,7 +11,6 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
   }
 
   const processedElements = new WeakSet<HTMLElement>();
-  const isAggressiveMode = aggressiveModeSites.some((site) => window.location.href.includes(site));
 
   function getRGBValues(str: string): number[] {
     return str.substring(str.indexOf('(') + 1, str.length - 1).split(', ').map(Number);
@@ -53,7 +53,6 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
   function simulateOnUrlChange(callback: () => void): void {
     let lastUrl = location.href;
 
-    // Intercept history.pushState and history.replaceState
     const originalPushState = history.pushState;
     const originalReplaceState = history.replaceState;
 
@@ -67,10 +66,8 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
       callbackIfUrlChanged();
     };
 
-    // Listen for popstate (back/forward navigation)
     window.addEventListener('popstate', callbackIfUrlChanged);
 
-    // Poll as a fallback for other URL changes
     setInterval(() => {
       callbackIfUrlChanged();
     }, 500);
@@ -83,13 +80,11 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
     }
   }
 
-  // Toggle between regular and aggressive mode
-  if (isAggressiveMode) {
-    console.log('Aggressive mode enabled for this site.');
+  if (alwaysOnAggressiveMode || aggressiveModeSites.some((site) => window.location.href.includes(site))) {
+    console.log('Aggressive mode enabled.');
     processElements();
     observeMutations();
     simulateOnUrlChange(() => {
-      console.log('URL changed to:', location.href);
       processElements();
     });
   } else {

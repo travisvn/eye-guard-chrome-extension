@@ -2,7 +2,7 @@ chrome.runtime.onInstalled.addListener(() => {
   console.log('Eye Guard installed or updated.');
 
   // Set default settings only if they are not already set
-  chrome.storage.sync.get(['color', 'enabled', 'excludedSites'], (data) => {
+  chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode'], (data) => {
     const updates: Partial<Record<string, any>> = {};
 
     if (!data.color) {
@@ -13,6 +13,12 @@ chrome.runtime.onInstalled.addListener(() => {
     }
     if (!data.excludedSites) {
       updates.excludedSites = []; // Default to no excluded sites
+    }
+    if (!data.aggressiveModeSites) {
+      updates.aggressiveModeSites = []; // Default to no excluded sites
+    }
+    if (data.alwaysOnAggressiveMode === undefined) {
+      updates.alwaysOnAggressiveMode = false; // Default to disabled
     }
 
     if (Object.keys(updates).length > 0) {
@@ -39,4 +45,20 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     });
   }
   return true; // Keeps the message channel open for async response
+});
+
+chrome.webNavigation.onCommitted.addListener((details) => {
+  // Ignore if it's not the main frame or navigation to a new page
+  if (details.frameId !== 0) return;
+
+  // Inject the content script programmatically
+  chrome.scripting.executeScript(
+    {
+      target: { tabId: details.tabId },
+      files: ['content.js']
+    },
+    () => {
+      // console.log('Content script re-injected after navigation.');
+    }
+  );
 });

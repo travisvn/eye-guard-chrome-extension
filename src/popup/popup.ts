@@ -13,10 +13,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const saveSitesAggressiveModeButton = document.getElementById('saveSitesAggressiveMode') as HTMLButtonElement;
   const addCurrentSiteAggressiveModeButton = document.getElementById('addCurrentSiteAggressiveMode') as HTMLButtonElement;
 
+  const aggressiveModeToggle = document.getElementById('alwaysOnAggressiveMode') as HTMLInputElement;
+
   const status = document.getElementById('status') as HTMLParagraphElement;
 
   const darkModeToggle = document.getElementById('darkModeToggle');
   const darkModeIcon = document.getElementById('darkModeIcon');
+
+  const statusTimeout = 2000;
 
   // Load dark mode setting
   chrome.storage.sync.get(['darkMode'], (data) => {
@@ -55,18 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const DEFAULT_COLOR = '#cce8cf'; // Default seafoam green color
 
-  chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites'], (data) => {
+  chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode'], (data) => {
     colorPicker.value = data.color || DEFAULT_COLOR;
     toggleExtension.checked = data.enabled ?? true;
     excludedSites.value = (data.excludedSites || []).join('\n');
     aggressiveModeSites.value = (data.aggressiveModeSites || []).join('\n');
+    aggressiveModeToggle.checked = data.alwaysOnAggressiveMode ?? false;
   });
 
   // Update the color
   colorPicker.addEventListener('input', () => {
     chrome.storage.sync.set({ color: colorPicker.value }, () => {
       status.textContent = 'Color updated!';
-      setTimeout(() => (status.textContent = ''), 1000);
+      setTimeout(() => (status.textContent = ''), statusTimeout);
     });
   });
 
@@ -75,14 +80,21 @@ document.addEventListener('DOMContentLoaded', () => {
     chrome.storage.sync.set({ color: DEFAULT_COLOR }, () => {
       colorPicker.value = DEFAULT_COLOR;
       status.textContent = 'Color reset to default!';
-      setTimeout(() => (status.textContent = ''), 1000);
+      setTimeout(() => (status.textContent = ''), statusTimeout);
     });
   });
 
   toggleExtension.addEventListener('change', () => {
     chrome.storage.sync.set({ enabled: toggleExtension.checked }, () => {
       status.textContent = 'Extension enabled status updated!';
-      setTimeout(() => (status.textContent = ''), 1000);
+      setTimeout(() => (status.textContent = ''), statusTimeout);
+    });
+  });
+
+  aggressiveModeToggle.addEventListener('change', () => {
+    chrome.storage.sync.set({ alwaysOnAggressiveMode: aggressiveModeToggle.checked }, () => {
+      status.textContent = 'Aggressive mode updated!';
+      setTimeout(() => (status.textContent = ''), statusTimeout);
     });
   });
 
@@ -90,7 +102,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sites = excludedSites.value.split('\n').map((site) => site.trim()).filter(Boolean);
     chrome.storage.sync.set({ excludedSites: sites }, () => {
       status.textContent = 'Excluded sites updated!';
-      setTimeout(() => (status.textContent = ''), 1000);
+      setTimeout(() => (status.textContent = ''), statusTimeout);
     });
   });
 
@@ -105,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.set({ excludedSites: Array.from(sites) }, () => {
           excludedSites.value = Array.from(sites).join('\n');
           status.textContent = 'Current site added to ignore list!';
-          setTimeout(() => (status.textContent = ''), 1000);
+          setTimeout(() => (status.textContent = ''), statusTimeout);
         });
       });
     });
@@ -115,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sites = aggressiveModeSites.value.split('\n').map((site) => site.trim()).filter(Boolean);
     chrome.storage.sync.set({ aggressiveModeSites: sites }, () => {
       status.textContent = 'Aggressive mode sites updated!';
-      setTimeout(() => (status.textContent = ''), 1000);
+      setTimeout(() => (status.textContent = ''), statusTimeout);
     });
   });
 
@@ -130,7 +142,7 @@ document.addEventListener('DOMContentLoaded', () => {
         chrome.storage.sync.set({ aggressiveModeSites: Array.from(sites) }, () => {
           aggressiveModeSites.value = Array.from(sites).join('\n');
           status.textContent = 'Current site added to aggressive mode!';
-          setTimeout(() => (status.textContent = ''), 1000);
+          setTimeout(() => (status.textContent = ''), statusTimeout);
         });
       });
     });

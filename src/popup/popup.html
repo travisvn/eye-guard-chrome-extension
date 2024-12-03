@@ -16,7 +16,6 @@
         class="p-2 rounded-full bg-black/5 dark:bg-white/10 hover:bg-black/10 dark:hover:bg-white/20 transition duration-200"
         title="Toggle Dark Mode"
       >
-        <!-- Default: Sun Icon -->
         <svg
           id="darkModeIcon"
           xmlns="http://www.w3.org/2000/svg"
@@ -97,6 +96,27 @@
         ></label>
       </div>
     </div>
+    <div class="mb-4 flex flex-row gap-2 items-center justify-center">
+      <label
+        for="alwaysOnAggressiveMode"
+        class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+      >
+        Always-on Aggressive Mode
+      </label>
+      <div
+        class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
+      >
+        <input
+          type="checkbox"
+          id="alwaysOnAggressiveMode"
+          class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+        />
+        <label
+          for="alwaysOnAggressiveMode"
+          class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+        ></label>
+      </div>
+    </div>
     <div class="mb-4">
       <h2 class="text-sm font-bold mb-2">Excluded Sites</h2>
       <textarea
@@ -145,7 +165,6 @@
             <path d="M12 8h.01" />
           </svg>
 
-          <!-- Tooltip -->
           <div
             class="absolute hidden group-hover:block top-6 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded-md p-2 shadow-md shadow-black/30"
             style="width: 220px; z-index: 10"
