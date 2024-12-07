@@ -35,7 +35,7 @@ Whether you're reading, working, or simply browsing the web, Eye Guard ensures y
 
 ## 📥 Installation
 
-1. Download the Eye Guard Chrome Extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/nhglnggngmgclfbaoijiopmpffjpjeba).
+1. Download the Eye Guard Chrome Extension from the [Chrome Web Store](https://chromewebstore.google.com/detail/eye-guard-reduce-eye-stra/nhglnggngmgclfbaoijiopmpffjpjeba).
 2. Pin the extension to your toolbar for quick access.
 3. Customize the settings to your liking and let Eye Guard do the rest!
 
