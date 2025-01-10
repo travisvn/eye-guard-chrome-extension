@@ -2,6 +2,8 @@
 
 Eye Guard is a Chrome Extension designed to reduce eye strain and fatigue while browsing. By replacing bright white backgrounds with a soothing, customizable color, it provides a more comfortable and enjoyable browsing experience.
 
+**Now available as an [Edge Add-on](https://microsoftedge.microsoft.com/addons/detail/eye-guard-reduce-eye-st/mjhedldegfchigijcljnpkglblnhkiak)!**
+
 ## 🚀 Features
 
 - **Customizable Colors**: Select the background color that works best for your eyes.
