@@ -25,3 +25,9 @@ dist-ssr
 
 .env
 *.txt
+
+.cursorignore
+CLAUDE.md
+.cursorrules
+_notes
+_internal
