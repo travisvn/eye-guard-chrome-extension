@@ -138,7 +138,8 @@
 /* Floating Notification Styling */
 #floatingSuggestionNotification {
   position: fixed;
-  bottom: 16px;
+  /* bottom: 16px; */
+  bottom: 0;
   left: 16px;
   right: 16px;
   z-index: 50;
@@ -146,11 +147,11 @@
 }
 
 #floatingSuggestionNotification.show {
-  transform: translateY(0);
+  transform: translateY(-16px);
 }
 
 #floatingSuggestionNotification.hide {
-  transform: translateY(130%);
+  transform: translateY(100%);
 }
 
 /* Ensure the main body has relative positioning for the fixed notification */

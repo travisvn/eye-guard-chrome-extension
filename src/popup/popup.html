@@ -419,53 +419,47 @@
       id="floatingSuggestionNotification"
       class="fixed bottom-4 left-4 right-4 transform translate-y-full transition-transform duration-300 ease-out z-50"
     >
-      <div
-        class="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white rounded-lg shadow-lg border border-blue-400 dark:border-blue-500"
-      >
-        <div class="p-4">
-          <div class="flex items-center justify-between">
-            <div class="flex items-center gap-3">
-              <div class="flex-shrink-0">
-                <svg
-                  class="w-5 h-5 text-blue-100"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
-              </div>
-              <div class="flex-1 min-w-0">
-                <p class="text-sm font-medium text-white">
-                  Aggressive mode recommended
-                </p>
-                <p class="text-xs text-blue-100 mt-1">
-                  This site may benefit from enhanced processing
-                </p>
-              </div>
-            </div>
+      <div class="bg-[#85c1dc] text-white rounded-md shadow-md p-2 relative">
+        <button
+          id="dismissSuggestionBtn"
+          class="p-1 text-sky-100 hover:text-white transition-colors duration-200 absolute top-1 right-1"
+          title="Dismiss"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
+        <div class="flex flex-col gap-1.5 items-start justify-start w-full">
+          <div class="flex flex-row justify-start items-center w-full gap-2">
+            <svg
+              class="w-5 h-5 text-sky-100"
+              fill="currentColor"
+              viewBox="0 0 20 20"
+            >
+              <path
+                fill-rule="evenodd"
+                d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                clip-rule="evenodd"
+              ></path>
+            </svg>
+            <p class="text-sm font-medium text-white">
+              Aggressive mode recommended
+            </p>
+          </div>
+          <p class="text-xs text-sky-100 w-full text-right">
+            This site may benefit from enhanced processing
+          </p>
+          <div class="flex items-center justify-end w-full">
             <div class="flex items-center gap-2 ml-4">
               <button
                 id="acceptSuggestionBtn"
-                class="px-3 py-1 bg-white text-blue-600 rounded-md text-xs font-medium hover:bg-blue-50 transition-colors duration-200"
+                class="px-3 py-1 bg-white text-[#6fabc7] rounded-md text-xs font-medium hover:bg-blue-50 transition-colors duration-200"
               >
                 Accept
-              </button>
-              <button
-                id="dismissSuggestionBtn"
-                class="p-1 text-blue-100 hover:text-white transition-colors duration-200"
-                title="Dismiss"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path
-                    fill-rule="evenodd"
-                    d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-                    clip-rule="evenodd"
-                  ></path>
-                </svg>
               </button>
             </div>
           </div>
