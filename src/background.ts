@@ -1,7 +1,7 @@
 // Suggested sites that commonly benefit from aggressive mode
 const SUGGESTED_AGGRESSIVE_SITES = [
   'dash.cloudflare.com',
-  'developers.cloudflare.com', 
+  'developers.cloudflare.com',
   'docs.deno.com',
   'docs.sillytavern.app',
   'sillytavern.app',
@@ -20,7 +20,8 @@ const SUGGESTED_AGGRESSIVE_SITES = [
   'notion.so',
   'linear.app',
   'vercel.com',
-  'supabase.com'
+  'supabase.com',
+  'github.com',
 ];
 
 chrome.runtime.onInstalled.addListener(() => {
@@ -72,7 +73,7 @@ chrome.runtime.onInstalled.addListener(() => {
 function checkIfSuggestedSite(url: string): boolean {
   try {
     const hostname = new URL(url).hostname;
-    return SUGGESTED_AGGRESSIVE_SITES.some(site => 
+    return SUGGESTED_AGGRESSIVE_SITES.some(site =>
       hostname === site || hostname.endsWith('.' + site)
     );
   } catch {
@@ -94,7 +95,7 @@ function updateBadgeForTab(tabId: number, url: string): void {
 
     const hostname = new URL(url).hostname;
     const aggressiveModeSites = data.aggressiveModeSites || [];
-    const isAlreadyInAggressive = aggressiveModeSites.some((site: string) => 
+    const isAlreadyInAggressive = aggressiveModeSites.some((site: string) =>
       hostname.includes(site) || site.includes(hostname)
     );
 
@@ -103,9 +104,9 @@ function updateBadgeForTab(tabId: number, url: string): void {
     } else {
       chrome.action.setBadgeText({ text: '!', tabId });
       chrome.action.setBadgeBackgroundColor({ color: '#ff6b35', tabId });
-      chrome.action.setTitle({ 
-        title: 'Eye Guard suggests aggressive mode for this site', 
-        tabId 
+      chrome.action.setTitle({
+        title: 'Eye Guard suggests aggressive mode for this site',
+        tabId
       });
     }
   });

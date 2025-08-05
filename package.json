@@ -1,6 +1,6 @@
 {
   "name": "eye-guard-chrome-extension",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Replace white backgrounds with a customizable color to reduce eye strain.",
   "author": "Travis",
   "license": "GPL-3.0",

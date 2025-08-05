@@ -133,7 +133,15 @@ chrome.storage.sync.get([
     return false;
   }
 
-  function shouldChangeElement(element: HTMLElement): boolean {
+  function hasBackgroundImage(element: HTMLElement): boolean {
+    const computedStyle = window.getComputedStyle(element);
+    const backgroundImage = computedStyle.backgroundImage;
+    
+    // Check if element has any background image (including gradients)
+    return backgroundImage && backgroundImage !== 'none';
+  }
+
+  function shouldChangeElement(element: HTMLElement, isAggressiveMode: boolean): boolean {
     if (processedElements.has(element)) {
       return false;
     }
@@ -151,25 +159,33 @@ chrome.storage.sync.get([
       return false;
     }
 
+    // Never replace elements with background images (themes, wallpapers, etc.)
+    if (hasBackgroundImage(element)) {
+      return false;
+    }
+
     const tagName = element.tagName.toLowerCase();
 
+    // Primary elements - always process in both modes
     if (CONFIG.primaryElements.includes(tagName)) {
       return true;
     }
 
+    // Container elements - only in aggressive mode
     if (CONFIG.containerElements.includes(tagName)) {
-      return true;
+      return isAggressiveMode;
     }
 
+    // Secondary elements - only large ones in aggressive mode
     if (CONFIG.secondaryElements.includes(tagName)) {
-      return isLargeEnough(element);
+      return isAggressiveMode && isLargeEnough(element);
     }
 
     return false;
   }
 
-  function changeElementBackground(element: HTMLElement): boolean {
-    if (!shouldChangeElement(element)) {
+  function changeElementBackground(element: HTMLElement, isAggressiveMode: boolean): boolean {
+    if (!shouldChangeElement(element, isAggressiveMode)) {
       return false;
     }
 
@@ -179,7 +195,7 @@ chrome.storage.sync.get([
 
     // Check direct background color
     if (directBgColor && isLightColor(directBgColor)) {
-      log(`Changing direct background of ${element.tagName}`, directBgColor);
+      log(`[${isAggressiveMode ? 'AGGRESSIVE' : 'REGULAR'}] Changing direct background of ${element.tagName}`, directBgColor);
       element.style.setProperty('background-color', CONFIG.targetColor, 'important');
       processedElements.add(element);
 
@@ -191,12 +207,12 @@ chrome.storage.sync.get([
       return true;
     }
 
-    // Check effective background color (inherited from parents) - only for primary/secondary elements
-    if (!CONFIG.containerElements.includes(tagName)) {
+    // Check effective background color (inherited from parents) - only for primary/secondary elements in aggressive mode
+    if (!CONFIG.containerElements.includes(tagName) && isAggressiveMode) {
       const effectiveBgColor = getEffectiveBackgroundColor(element);
       if (effectiveBgColor && isLightColor(effectiveBgColor)) {
         if (!directBgColor || computedStyle.backgroundColor === 'transparent') {
-          log(`Changing inherited background of ${element.tagName}`, effectiveBgColor);
+          log(`[AGGRESSIVE] Changing inherited background of ${element.tagName}`, effectiveBgColor);
           element.style.setProperty('background-color', CONFIG.targetColor, 'important');
           processedElements.add(element);
           return true;
@@ -208,8 +224,27 @@ chrome.storage.sync.get([
     return false;
   }
 
-  function processAllElements(): number {
-    log('Processing all elements...');
+  function processElementsRegularMode(): number {
+    log('Processing elements in REGULAR mode (conservative)...');
+    processingStartTime = Date.now();
+    let changedCount = 0;
+
+    // In regular mode, only target primary elements and be very conservative
+    const primarySelector = CONFIG.primaryElements.join(',');
+    const elements = document.querySelectorAll(primarySelector);
+
+    elements.forEach((element) => {
+      if (changeElementBackground(element as HTMLElement, false)) {
+        changedCount++;
+      }
+    });
+
+    log(`[REGULAR] Changed ${changedCount} elements in ${Date.now() - processingStartTime}ms`);
+    return changedCount;
+  }
+
+  function processElementsAggressiveMode(): number {
+    log('Processing elements in AGGRESSIVE mode (comprehensive)...');
     processingStartTime = Date.now();
     let changedCount = 0;
     let processedCount = 0;
@@ -225,16 +260,16 @@ chrome.storage.sync.get([
         setTimeout(() => {
           const remainingElements = Array.from(allElements).slice(i);
           remainingElements.forEach((el) => {
-            if (changeElementBackground(el as HTMLElement)) {
+            if (changeElementBackground(el as HTMLElement, true)) {
               changedCount++;
             }
           });
-          log(`Completed processing remaining ${remainingElements.length} elements, total changed: ${changedCount}`);
+          log(`[AGGRESSIVE] Completed processing remaining ${remainingElements.length} elements, total changed: ${changedCount}`);
         }, 0);
         break;
       }
 
-      if (changeElementBackground(element)) {
+      if (changeElementBackground(element, true)) {
         changedCount++;
       }
       processedCount++;
@@ -242,26 +277,31 @@ chrome.storage.sync.get([
 
     // Also process document elements specifically
     [document.documentElement, document.body].forEach((element) => {
-      if (element && changeElementBackground(element as HTMLElement)) {
+      if (element && changeElementBackground(element as HTMLElement, true)) {
         changedCount++;
       }
     });
 
-    log(`Changed ${changedCount} elements in ${Date.now() - processingStartTime}ms`);
+    log(`[AGGRESSIVE] Changed ${changedCount} elements in ${Date.now() - processingStartTime}ms`);
     return changedCount;
   }
 
-  function throttledObserverCallback(): void {
+  // Wrapper function that chooses the appropriate processing mode
+  function processAllElements(isAggressiveMode: boolean = false): number {
+    return isAggressiveMode ? processElementsAggressiveMode() : processElementsRegularMode();
+  }
+
+  function throttledObserverCallback(isAggressiveMode: boolean): void {
     if (observerTimeout) {
       clearTimeout(observerTimeout);
     }
 
     observerTimeout = setTimeout(() => {
-      processAllElements();
+      processAllElements(isAggressiveMode);
     }, CONFIG.observerThrottle);
   }
 
-  function setupMutationObserver(): MutationObserver {
+  function setupMutationObserver(isAggressiveMode: boolean): MutationObserver {
     const observer = new MutationObserver((mutations) => {
       let shouldProcess = false;
 
@@ -278,7 +318,7 @@ chrome.storage.sync.get([
 
       if (shouldProcess) {
         log('DOM mutation detected, reprocessing...');
-        throttledObserverCallback();
+        throttledObserverCallback(isAggressiveMode);
       }
     });
 
@@ -289,11 +329,11 @@ chrome.storage.sync.get([
       attributeFilter: ['style', 'class'],
     });
 
-    log('Mutation observer set up');
+    log('Mutation observer set up for aggressive mode');
     return observer;
   }
 
-  function setupIntersectionObserver(): IntersectionObserver | null {
+  function setupIntersectionObserver(isAggressiveMode: boolean): IntersectionObserver | null {
     if (!window.IntersectionObserver) {
       log('Intersection Observer not supported');
       return null;
@@ -303,7 +343,7 @@ chrome.storage.sync.get([
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            changeElementBackground(entry.target as HTMLElement);
+            changeElementBackground(entry.target as HTMLElement, isAggressiveMode);
           }
         });
       },
@@ -314,11 +354,11 @@ chrome.storage.sync.get([
       observer.observe(element);
     });
 
-    log('Intersection observer set up');
+    log('Intersection observer set up for aggressive mode');
     return observer;
   }
 
-  function setupURLChangeDetection(): void {
+  function setupURLChangeDetection(isAggressiveMode: boolean): void {
     let currentURL = window.location.href;
 
     const originalPushState = history.pushState;
@@ -332,7 +372,7 @@ chrome.storage.sync.get([
           log('URL changed via pushState, reprocessing...');
           processedElements = new WeakSet<HTMLElement>();
           processedContainers = new WeakSet<HTMLElement>();
-          setTimeout(() => processAllElements(), 500);
+          setTimeout(() => processAllElements(isAggressiveMode), 500);
         }
       }, 100);
     };
@@ -345,7 +385,7 @@ chrome.storage.sync.get([
           log('URL changed via replaceState, reprocessing...');
           processedElements = new WeakSet<HTMLElement>();
           processedContainers = new WeakSet<HTMLElement>();
-          setTimeout(() => processAllElements(), 500);
+          setTimeout(() => processAllElements(isAggressiveMode), 500);
         }
       }, 100);
     };
@@ -354,10 +394,10 @@ chrome.storage.sync.get([
       log('Popstate event, reprocessing...');
       processedElements = new WeakSet<HTMLElement>();
       processedContainers = new WeakSet<HTMLElement>();
-      setTimeout(() => processAllElements(), 500);
+      setTimeout(() => processAllElements(isAggressiveMode), 500);
     });
 
-    log('URL change detection set up');
+    log('URL change detection set up for aggressive mode');
   }
 
   function injectGlobalCSS(): void {
@@ -389,9 +429,6 @@ chrome.storage.sync.get([
     // Inject global CSS first
     injectGlobalCSS();
 
-    // Initial processing
-    setTimeout(() => processAllElements(), 100);
-
     // Check if current site is in suggested aggressive sites
     const suggestedSites = [
       'dash.cloudflare.com', 'developers.cloudflare.com', 'docs.deno.com',
@@ -411,28 +448,38 @@ chrome.storage.sync.get([
       aggressiveModeSites.some((site) => window.location.href.includes(site)) ||
       (autoAggressiveSites && isSuggestedSite);
 
-    // Set up observers for aggressive mode
+    // Initial processing with appropriate mode
+    setTimeout(() => processAllElements(shouldUseAggressive), 100);
+
     if (shouldUseAggressive) {
-      console.log('Aggressive mode enabled.');
-      setupMutationObserver();
-      setupIntersectionObserver();
-      setupURLChangeDetection();
+      console.log('AGGRESSIVE mode enabled - comprehensive processing with observers');
+      setupMutationObserver(true);
+      setupIntersectionObserver(true);
+      setupURLChangeDetection(true);
 
       // Periodic reprocessing for stubborn elements
       setInterval(() => {
-        log('Periodic reprocessing...');
-        processAllElements();
+        log('Periodic aggressive reprocessing...');
+        processAllElements(true);
       }, 10000);
 
       // Additional processing on various events
       ['load', 'DOMContentLoaded', 'resize', 'scroll'].forEach((eventType) => {
         window.addEventListener(eventType, () => {
-          log(`${eventType} event triggered, reprocessing...`);
-          setTimeout(() => processAllElements(), 200);
+          log(`${eventType} event triggered, aggressive reprocessing...`);
+          setTimeout(() => processAllElements(true), 200);
         });
       });
     } else {
-      console.log('Regular mode enabled.');
+      console.log('REGULAR mode enabled - conservative processing, no observers');
+      
+      // Light event handling for regular mode
+      ['load', 'DOMContentLoaded'].forEach((eventType) => {
+        window.addEventListener(eventType, () => {
+          log(`${eventType} event triggered, regular reprocessing...`);
+          setTimeout(() => processAllElements(false), 200);
+        });
+      });
     }
 
     log('Eye Guard Enhanced initialized');

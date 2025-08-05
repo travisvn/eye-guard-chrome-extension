@@ -26,7 +26,7 @@
 .slider {
   -webkit-appearance: none;
   appearance: none;
-  background: transparent;
+  background: #d1d5db;
   cursor: pointer;
 }
 
@@ -150,7 +150,7 @@
 }
 
 #floatingSuggestionNotification.hide {
-  transform: translateY(100%);
+  transform: translateY(130%);
 }
 
 /* Ensure the main body has relative positioning for the fixed notification */
