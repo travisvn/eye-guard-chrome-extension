@@ -29,7 +29,7 @@ chrome.runtime.onInstalled.addListener(() => {
   // Set default settings only if they are not already set
   chrome.storage.sync.get([
     'color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode',
-    'sensitivity', 'autoAggressiveSites', 'suggestedSitesEnabled'
+    'sensitivity', 'autoAggressiveSites', 'suggestedSitesEnabled', 'activeTab'
   ], (data) => {
     const updates: Partial<Record<string, any>> = {};
 
@@ -56,6 +56,9 @@ chrome.runtime.onInstalled.addListener(() => {
     }
     if (data.suggestedSitesEnabled === undefined) {
       updates.suggestedSitesEnabled = true; // Default to showing suggestions
+    }
+    if (!data.activeTab) {
+      updates.activeTab = 'colors'; // Default to colors tab
     }
 
     if (Object.keys(updates).length > 0) {

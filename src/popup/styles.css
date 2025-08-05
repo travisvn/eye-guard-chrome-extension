@@ -89,3 +89,71 @@
 .dark .slider::-moz-range-thumb {
   border-color: #374151;
 }
+
+/* Tab System Styling */
+.tab-button {
+  position: relative;
+  overflow: hidden;
+}
+
+.tab-button.active {
+  background-color: #ffffff;
+  color: #1f2937;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.dark .tab-button.active {
+  background-color: #374151;
+  color: #f9fafb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.tab-button:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.dark .tab-button:not(.active):hover {
+  background-color: rgba(75, 85, 99, 0.5);
+}
+
+/* Tab Panel Styling */
+.tab-panel {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+}
+
+.tab-panel.hidden {
+  opacity: 0;
+  transform: translateY(10px);
+  position: absolute;
+  pointer-events: none;
+}
+
+.tab-content {
+  position: relative;
+  min-height: 300px;
+}
+
+/* Floating Notification Styling */
+#floatingSuggestionNotification {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  z-index: 50;
+  max-width: 318px; /* Popup width minus padding */
+}
+
+#floatingSuggestionNotification.show {
+  transform: translateY(0);
+}
+
+#floatingSuggestionNotification.hide {
+  transform: translateY(100%);
+}
+
+/* Ensure the main body has relative positioning for the fixed notification */
+.main {
+  position: relative;
+}

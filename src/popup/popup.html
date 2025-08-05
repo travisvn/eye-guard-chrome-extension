@@ -41,243 +41,309 @@
     </div>
 
     <h1 class="text-xl font-bold mb-4 text-center">Eye Guard</h1>
-    <div class="mb-4 flex flex-row gap-2 items-center justify-center">
-      <label
-        for="colorPicker"
-        class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-      >
-        Background color:
-      </label>
-      <input
-        type="color"
-        id="colorPicker"
-        class="block w-16 h-6 rounded-sm border-gray-300 shadow-sm cursor-pointer"
-      />
-      <button
-        id="resetColor"
-        class="flex items-center justify-center bg-gray-300 dark:bg-gray-500 text-white p-1 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 duration-200"
-        title="Reset to Default"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="w-5 h-5"
-        >
-          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
-          <path d="M3 3v5h5" />
-        </svg>
-      </button>
-    </div>
     
-    <!-- Color Presets Section -->
+    <!-- Tab Navigation -->
     <div class="mb-4">
-      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 text-center">Quick Presets</h3>
-      <div class="grid grid-cols-4 gap-2">
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#cce8cf" data-name="Default" style="background-color: #cce8cf" title="Default Green"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#f4f1de" data-name="Sepia" style="background-color: #f4f1de" title="Sepia"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#e8f4f8" data-name="Sky Blue" style="background-color: #e8f4f8" title="Sky Blue"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#f0f0f0" data-name="Warm Gray" style="background-color: #f0f0f0" title="Warm Gray"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#fdf6e3" data-name="Cream" style="background-color: #fdf6e3" title="Cream"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#e8f5e8" data-name="Light Green" style="background-color: #e8f5e8" title="Light Green"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#fff8dc" data-name="Cornsilk" style="background-color: #fff8dc" title="Cornsilk"></button>
-        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
-                data-color="#f5f5dc" data-name="Beige" style="background-color: #f5f5dc" title="Beige"></button>
-      </div>
-    </div>
-
-    <!-- Sensitivity Slider Section -->
-    <div class="mb-4">
-      <div class="flex flex-row items-center justify-between mb-2">
-        <label for="sensitivitySlider" class="text-sm font-medium text-gray-700 dark:text-gray-200">
-          Sensitivity
-        </label>
-        <span id="sensitivityValue" class="text-sm text-gray-600 dark:text-gray-300 font-mono">240</span>
-      </div>
-      <input type="range" id="sensitivitySlider" min="200" max="255" step="5" value="240" 
-             class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider">
-      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
-        <span>More Sensitive</span>
-        <span>Less Sensitive</span>
-      </div>
-    </div>
-
-    <div class="mb-4 flex flex-row gap-2 items-center justify-center">
-      <label
-        for="toggleExtension"
-        class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-      >
-        Enable Eye Guard
-      </label>
-      <div
-        class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
-      >
-        <input
-          type="checkbox"
-          id="toggleExtension"
-          class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-        />
-        <label
-          for="toggleExtension"
-          class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
-        ></label>
-      </div>
-    </div>
-    <div class="mb-4 flex flex-row gap-2 items-center justify-center">
-      <label
-        for="alwaysOnAggressiveMode"
-        class="block text-sm font-medium text-gray-700 dark:text-gray-200"
-      >
-        Always-on Aggressive Mode
-      </label>
-      <div
-        class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
-      >
-        <input
-          type="checkbox"
-          id="alwaysOnAggressiveMode"
-          class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
-        />
-        <label
-          for="alwaysOnAggressiveMode"
-          class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
-        ></label>
-      </div>
-    </div>
-    <div class="mb-4">
-      <h2 class="text-sm font-bold mb-2">Excluded Sites</h2>
-      <textarea
-        id="excludedSites"
-        class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm p-2 text-black dark:text-black active:outline-sky-600 focus:outline-blue-400 duration-200 transition"
-        rows="4"
-        placeholder="Add one site per line"
-      ></textarea>
-      <div class="flex flex-row justify-between">
-        <button
-          id="saveSites"
-          class="mt-2 bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 duration-200"
-        >
-          Save Exclusions
-        </button>
-        <button
-          id="addCurrentSite"
-          class="mt-2 bg-gray-500 text-white py-1 px-2 rounded-md hover:bg-gray-600 duration-200"
-        >
-          Add Current Site
-        </button>
-      </div>
-    </div>
-    <div class="mb-4">
-      <div class="flex flex-row items-center justify-start mb-2 gap-2">
-        <h2 class="text-sm font-bold">Aggressive-Mode Sites</h2>
-        <button
-          id="infoAggressiveMode"
-          class="relative group p-1 bg-gray-200 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 duration-200"
-          aria-label="What is Aggressive Mode?"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="w-5 h-5 text-gray-800 dark:text-gray-200"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M12 16v-4" />
-            <path d="M12 8h.01" />
+      <nav class="flex space-x-1 bg-gray-200 dark:bg-gray-600 rounded-lg p-1">
+        <button class="tab-button flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" 
+                data-tab="colors">
+          <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M4 2a2 2 0 00-2 2v11a2 2 0 002 2V4a2 2 0 012-2h11a2 2 0 00-2-2H4z" clip-rule="evenodd"></path>
+            <path fill-rule="evenodd" d="M15 7a1 1 0 011 1v8a1 1 0 01-1 1H8a1 1 0 01-1-1V8a1 1 0 011-1h7z" clip-rule="evenodd"></path>
           </svg>
-
-          <div
-            class="absolute hidden group-hover:block top-6 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded-md p-2 shadow-md shadow-black/30"
-            style="width: 220px; z-index: 10"
-          >
-            Aggressive mode monitors SPAs (Single Page Applications) and
-            trickier sites for dynamic content updates and applies the Eye Guard
-            styles more frequently.
-          </div>
+          Colors
         </button>
-      </div>
-      <textarea
-        id="aggressiveModeSites"
-        class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm p-2 text-black dark:text-black active:outline-sky-600 focus:outline-blue-400 duration-200 transition"
-        rows="3"
-        placeholder="Add one site per line"
-      ></textarea>
-      <div class="flex flex-row justify-between">
-        <button
-          id="saveSitesAggressiveMode"
-          class="mt-2 bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 duration-200"
-        >
-          Save Sites
+        <button class="tab-button flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" 
+                data-tab="sites">
+          <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M3 5a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2h-2.22l.123.489.804.804A1 1 0 0113 18H7a1 1 0 01-.707-1.707l.804-.804L7.22 15H5a2 2 0 01-2-2V5zm5.771 7H5V5h10v7H8.771z" clip-rule="evenodd"></path>
+          </svg>
+          Sites
         </button>
-        <button
-          id="addCurrentSiteAggressiveMode"
-          class="mt-2 bg-gray-500 text-white py-1 px-2 rounded-md hover:bg-gray-600 duration-200"
-        >
-          Add Current Site
+        <button class="tab-button flex-1 py-2 px-3 text-sm font-medium rounded-md transition-colors duration-200 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" 
+                data-tab="settings">
+          <svg class="w-4 h-4 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"></path>
+          </svg>
+          Settings
         </button>
-      </div>
+      </nav>
     </div>
-    
-    <!-- Suggested Sites Section -->
-    <div class="mb-4">
-      <h2 class="text-sm font-bold mb-2">Suggested Sites</h2>
+
+    <!-- Tab Content -->
+    <div class="tab-content">
       
-      <!-- Suggested Site Notification -->
-      <div id="suggestedSiteNotification" class="hidden mb-3 p-3 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 rounded-md">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+      <!-- Colors Tab -->
+      <div class="tab-panel" data-tab="colors">
+        <!-- Color Picker Section -->
+        <div class="mb-4 flex flex-row gap-2 items-center justify-center">
+          <label
+            for="colorPicker"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            Background color:
+          </label>
+          <input
+            type="color"
+            id="colorPicker"
+            class="block w-16 h-6 rounded-sm border-gray-300 shadow-sm cursor-pointer"
+          />
+          <button
+            id="resetColor"
+            class="flex items-center justify-center bg-gray-300 dark:bg-gray-500 text-white p-1 rounded-md hover:bg-gray-400 dark:hover:bg-gray-600 duration-200"
+            title="Reset to Default"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="w-5 h-5"
+            >
+              <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+              <path d="M3 3v5h5" />
             </svg>
-            <span class="text-sm text-blue-800 dark:text-blue-200">This site may benefit from aggressive mode</span>
-          </div>
-          <button id="addToAggressiveFromSuggestion" class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors">
-            Add
           </button>
         </div>
+        
+        <!-- Color Presets Section -->
+        <div class="mb-4">
+          <h3 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 text-center">Quick Presets</h3>
+          <div class="grid grid-cols-4 gap-2">
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#cce8cf" data-name="Default" style="background-color: #cce8cf" title="Default Green"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#f4f1de" data-name="Sepia" style="background-color: #f4f1de" title="Sepia"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#e8f4f8" data-name="Sky Blue" style="background-color: #e8f4f8" title="Sky Blue"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#f0f0f0" data-name="Warm Gray" style="background-color: #f0f0f0" title="Warm Gray"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#fdf6e3" data-name="Cream" style="background-color: #fdf6e3" title="Cream"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#e8f5e8" data-name="Light Green" style="background-color: #e8f5e8" title="Light Green"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#fff8dc" data-name="Cornsilk" style="background-color: #fff8dc" title="Cornsilk"></button>
+            <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                    data-color="#f5f5dc" data-name="Beige" style="background-color: #f5f5dc" title="Beige"></button>
+          </div>
+        </div>
+
+        <!-- Sensitivity Slider Section -->
+        <div class="mb-4">
+          <div class="flex flex-row items-center justify-between mb-2">
+            <label for="sensitivitySlider" class="text-sm font-medium text-gray-700 dark:text-gray-200">
+              Sensitivity
+            </label>
+            <span id="sensitivityValue" class="text-sm text-gray-600 dark:text-gray-300 font-mono">240</span>
+          </div>
+          <input type="range" id="sensitivitySlider" min="200" max="255" step="5" value="240" 
+                 class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider">
+          <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+            <span>More Sensitive</span>
+            <span>Less Sensitive</span>
+          </div>
+        </div>
       </div>
-      
-      <div class="space-y-3">
-        <div class="flex flex-row gap-2 items-center justify-between">
-          <label for="suggestedSitesEnabled" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Show suggestions
-          </label>
-          <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
-            <input type="checkbox" id="suggestedSitesEnabled" 
-                   class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-            <label for="suggestedSitesEnabled" 
-                   class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+
+      <!-- Sites Tab -->
+      <div class="tab-panel hidden" data-tab="sites">
+        <div class="mb-4">
+          <h2 class="text-sm font-bold mb-2">Excluded Sites</h2>
+          <textarea
+            id="excludedSites"
+            class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm p-2 text-black dark:text-black active:outline-sky-600 focus:outline-blue-400 duration-200 transition"
+            rows="4"
+            placeholder="Add one site per line"
+          ></textarea>
+          <div class="flex flex-row justify-between">
+            <button
+              id="saveSites"
+              class="mt-2 bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 duration-200"
+            >
+              Save Exclusions
+            </button>
+            <button
+              id="addCurrentSite"
+              class="mt-2 bg-gray-500 text-white py-1 px-2 rounded-md hover:bg-gray-600 duration-200"
+            >
+              Add Current Site
+            </button>
           </div>
         </div>
         
-        <div class="flex flex-row gap-2 items-center justify-between">
-          <label for="autoAggressiveSites" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
-            Auto-enable aggressive mode
+        <div class="mb-4">
+          <div class="flex flex-row items-center justify-start mb-2 gap-2">
+            <h2 class="text-sm font-bold">Aggressive-Mode Sites</h2>
+            <button
+              id="infoAggressiveMode"
+              class="relative group p-1 bg-gray-200 dark:bg-gray-600 rounded-full hover:bg-gray-300 dark:hover:bg-gray-500 duration-200"
+              aria-label="What is Aggressive Mode?"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="w-5 h-5 text-gray-800 dark:text-gray-200"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 16v-4" />
+                <path d="M12 8h.01" />
+              </svg>
+
+              <div
+                class="absolute hidden group-hover:block top-6 left-1/2 -translate-x-1/2 bg-black text-white text-xs rounded-md p-2 shadow-md shadow-black/30"
+                style="width: 220px; z-index: 10"
+              >
+                Aggressive mode monitors SPAs (Single Page Applications) and
+                trickier sites for dynamic content updates and applies the Eye Guard
+                styles more frequently.
+              </div>
+            </button>
+          </div>
+          <textarea
+            id="aggressiveModeSites"
+            class="w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm p-2 text-black dark:text-black active:outline-sky-600 focus:outline-blue-400 duration-200 transition"
+            rows="3"
+            placeholder="Add one site per line"
+          ></textarea>
+          <div class="flex flex-row justify-between">
+            <button
+              id="saveSitesAggressiveMode"
+              class="mt-2 bg-green-500 text-white py-1 px-2 rounded-md hover:bg-green-600 duration-200"
+            >
+              Save Sites
+            </button>
+            <button
+              id="addCurrentSiteAggressiveMode"
+              class="mt-2 bg-gray-500 text-white py-1 px-2 rounded-md hover:bg-gray-600 duration-200"
+            >
+              Add Current Site
+            </button>
+          </div>
+        </div>
+        
+        <!-- Suggested Sites Section -->
+        <div class="mb-4">
+          <h2 class="text-sm font-bold mb-2">Suggested Sites</h2>
+          
+          <div class="space-y-3">
+            <div class="flex flex-row gap-2 items-center justify-between">
+              <label for="suggestedSitesEnabled" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Show suggestions
+              </label>
+              <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                <input type="checkbox" id="suggestedSitesEnabled" 
+                       class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                <label for="suggestedSitesEnabled" 
+                       class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+              </div>
+            </div>
+            
+            <div class="flex flex-row gap-2 items-center justify-between">
+              <label for="autoAggressiveSites" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+                Auto-enable aggressive mode
+              </label>
+              <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+                <input type="checkbox" id="autoAggressiveSites" 
+                       class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+                <label for="autoAggressiveSites" 
+                       class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Settings Tab -->
+      <div class="tab-panel hidden" data-tab="settings">
+        <div class="mb-4 flex flex-row gap-2 items-center justify-center">
+          <label
+            for="toggleExtension"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            Enable Eye Guard
           </label>
-          <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
-            <input type="checkbox" id="autoAggressiveSites" 
-                   class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
-            <label for="autoAggressiveSites" 
-                   class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+          <div
+            class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
+          >
+            <input
+              type="checkbox"
+              id="toggleExtension"
+              class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+            />
+            <label
+              for="toggleExtension"
+              class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+            ></label>
+          </div>
+        </div>
+        
+        <div class="mb-4 flex flex-row gap-2 items-center justify-center">
+          <label
+            for="alwaysOnAggressiveMode"
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+          >
+            Always-on Aggressive Mode
+          </label>
+          <div
+            class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in"
+          >
+            <input
+              type="checkbox"
+              id="alwaysOnAggressiveMode"
+              class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"
+            />
+            <label
+              for="alwaysOnAggressiveMode"
+              class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"
+            ></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Floating Site Suggestion Notification -->
+    <div id="floatingSuggestionNotification" class="fixed bottom-4 left-4 right-4 transform translate-y-full transition-transform duration-300 ease-out z-50">
+      <div class="bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 text-white rounded-lg shadow-lg border border-blue-400 dark:border-blue-500">
+        <div class="p-4">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="flex-shrink-0">
+                <svg class="w-5 h-5 text-blue-100" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                </svg>
+              </div>
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-medium text-white">
+                  Aggressive mode recommended
+                </p>
+                <p class="text-xs text-blue-100 mt-1">
+                  This site may benefit from enhanced processing
+                </p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2 ml-4">
+              <button id="acceptSuggestionBtn" class="px-3 py-1 bg-white text-blue-600 rounded-md text-xs font-medium hover:bg-blue-50 transition-colors duration-200">
+                Accept
+              </button>
+              <button id="dismissSuggestionBtn" class="p-1 text-blue-100 hover:text-white transition-colors duration-200" title="Dismiss">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>

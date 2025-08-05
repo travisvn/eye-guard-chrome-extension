@@ -21,8 +21,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const sensitivityValue = document.getElementById('sensitivityValue') as HTMLSpanElement;
   const suggestedSitesEnabled = document.getElementById('suggestedSitesEnabled') as HTMLInputElement;
   const autoAggressiveSites = document.getElementById('autoAggressiveSites') as HTMLInputElement;
-  const suggestedSiteNotification = document.getElementById('suggestedSiteNotification') as HTMLDivElement;
-  const addToAggressiveFromSuggestion = document.getElementById('addToAggressiveFromSuggestion') as HTMLButtonElement;
+  
+  // Floating notification elements
+  const floatingSuggestionNotification = document.getElementById('floatingSuggestionNotification') as HTMLDivElement;
+  const acceptSuggestionBtn = document.getElementById('acceptSuggestionBtn') as HTMLButtonElement;
+  const dismissSuggestionBtn = document.getElementById('dismissSuggestionBtn') as HTMLButtonElement;
+
+  // Tab system elements
+  const tabButtons = document.querySelectorAll('.tab-button') as NodeListOf<HTMLButtonElement>;
+  const tabPanels = document.querySelectorAll('.tab-panel') as NodeListOf<HTMLDivElement>;
 
   const status = document.getElementById('status') as HTMLParagraphElement;
 
@@ -30,6 +37,62 @@ document.addEventListener('DOMContentLoaded', () => {
   const darkModeIcon = document.getElementById('darkModeIcon');
 
   const statusTimeout = 2000;
+
+  // Floating notification functionality
+  function showFloatingNotification() {
+    floatingSuggestionNotification.classList.remove('hide');
+    floatingSuggestionNotification.classList.add('show');
+  }
+
+  function hideFloatingNotification() {
+    floatingSuggestionNotification.classList.remove('show');
+    floatingSuggestionNotification.classList.add('hide');
+  }
+
+  // Tab system functionality
+  function switchTab(targetTab: string) {
+    // Update tab buttons
+    tabButtons.forEach(button => {
+      if (button.getAttribute('data-tab') === targetTab) {
+        button.classList.add('active');
+      } else {
+        button.classList.remove('active');
+      }
+    });
+
+    // Update tab panels
+    tabPanels.forEach(panel => {
+      if (panel.getAttribute('data-tab') === targetTab) {
+        panel.classList.remove('hidden');
+      } else {
+        panel.classList.add('hidden');
+      }
+    });
+
+    // Save active tab to storage
+    chrome.storage.sync.set({ activeTab: targetTab });
+  }
+
+  // Initialize tab system with persistent selection
+  function initializeTabs() {
+    chrome.storage.sync.get(['activeTab'], (data) => {
+      const activeTab = data.activeTab || 'colors'; // Default to colors tab
+      switchTab(activeTab);
+    });
+
+    // Add click listeners to tab buttons
+    tabButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const targetTab = button.getAttribute('data-tab');
+        if (targetTab) {
+          switchTab(targetTab);
+        }
+      });
+    });
+  }
+
+  // Initialize tab system
+  initializeTabs();
 
   // Load dark mode setting
   chrome.storage.sync.get(['darkMode'], (data) => {
@@ -206,19 +269,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Add to aggressive from suggestion
-  addToAggressiveFromSuggestion.addEventListener('click', () => {
+  // Floating notification event listeners
+  acceptSuggestionBtn.addEventListener('click', () => {
     chrome.runtime.sendMessage({ type: 'addCurrentToAggressive' }, (response) => {
       if (response.status === 'success') {
         aggressiveModeSites.value += (aggressiveModeSites.value ? '\n' : '') + response.site;
-        suggestedSiteNotification.classList.add('hidden');
+        hideFloatingNotification();
         status.textContent = 'Site added to aggressive mode!';
         setTimeout(() => (status.textContent = ''), statusTimeout);
       }
     });
   });
 
-  // Check if current site is suggested and show notification
+  dismissSuggestionBtn.addEventListener('click', () => {
+    hideFloatingNotification();
+  });
+
+  // Check if current site is suggested and show floating notification
   function checkSuggestedSiteNotification() {
     chrome.runtime.sendMessage({ type: 'getSuggestedSiteStatus' }, (response) => {
       if (response.isSuggested) {
@@ -231,10 +298,12 @@ document.addEventListener('DOMContentLoaded', () => {
             );
             
             if (!isAlreadyInAggressive) {
-              suggestedSiteNotification.classList.remove('hidden');
+              showFloatingNotification();
             }
           }
         });
+      } else {
+        hideFloatingNotification();
       }
     });
   }
