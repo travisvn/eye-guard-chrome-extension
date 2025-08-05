@@ -75,6 +75,46 @@
         </svg>
       </button>
     </div>
+    
+    <!-- Color Presets Section -->
+    <div class="mb-4">
+      <h3 class="text-sm font-medium text-gray-700 dark:text-gray-200 mb-2 text-center">Quick Presets</h3>
+      <div class="grid grid-cols-4 gap-2">
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#cce8cf" data-name="Default" style="background-color: #cce8cf" title="Default Green"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#f4f1de" data-name="Sepia" style="background-color: #f4f1de" title="Sepia"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#e8f4f8" data-name="Sky Blue" style="background-color: #e8f4f8" title="Sky Blue"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#f0f0f0" data-name="Warm Gray" style="background-color: #f0f0f0" title="Warm Gray"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#fdf6e3" data-name="Cream" style="background-color: #fdf6e3" title="Cream"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#e8f5e8" data-name="Light Green" style="background-color: #e8f5e8" title="Light Green"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#fff8dc" data-name="Cornsilk" style="background-color: #fff8dc" title="Cornsilk"></button>
+        <button class="color-preset w-full h-8 rounded border-2 border-gray-300 hover:border-blue-400 transition-colors duration-200" 
+                data-color="#f5f5dc" data-name="Beige" style="background-color: #f5f5dc" title="Beige"></button>
+      </div>
+    </div>
+
+    <!-- Sensitivity Slider Section -->
+    <div class="mb-4">
+      <div class="flex flex-row items-center justify-between mb-2">
+        <label for="sensitivitySlider" class="text-sm font-medium text-gray-700 dark:text-gray-200">
+          Sensitivity
+        </label>
+        <span id="sensitivityValue" class="text-sm text-gray-600 dark:text-gray-300 font-mono">240</span>
+      </div>
+      <input type="range" id="sensitivitySlider" min="200" max="255" step="5" value="240" 
+             class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700 slider">
+      <div class="flex justify-between text-xs text-gray-500 dark:text-gray-400 mt-1">
+        <span>More Sensitive</span>
+        <span>Less Sensitive</span>
+      </div>
+    </div>
+
     <div class="mb-4 flex flex-row gap-2 items-center justify-center">
       <label
         for="toggleExtension"
@@ -196,6 +236,53 @@
         </button>
       </div>
     </div>
+    
+    <!-- Suggested Sites Section -->
+    <div class="mb-4">
+      <h2 class="text-sm font-bold mb-2">Suggested Sites</h2>
+      
+      <!-- Suggested Site Notification -->
+      <div id="suggestedSiteNotification" class="hidden mb-3 p-3 bg-blue-100 dark:bg-blue-900 border border-blue-300 dark:border-blue-700 rounded-md">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+            </svg>
+            <span class="text-sm text-blue-800 dark:text-blue-200">This site may benefit from aggressive mode</span>
+          </div>
+          <button id="addToAggressiveFromSuggestion" class="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition-colors">
+            Add
+          </button>
+        </div>
+      </div>
+      
+      <div class="space-y-3">
+        <div class="flex flex-row gap-2 items-center justify-between">
+          <label for="suggestedSitesEnabled" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Show suggestions
+          </label>
+          <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+            <input type="checkbox" id="suggestedSitesEnabled" 
+                   class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+            <label for="suggestedSitesEnabled" 
+                   class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+          </div>
+        </div>
+        
+        <div class="flex flex-row gap-2 items-center justify-between">
+          <label for="autoAggressiveSites" class="block text-sm font-medium text-gray-700 dark:text-gray-200">
+            Auto-enable aggressive mode
+          </label>
+          <div class="relative inline-block w-10 align-middle select-none transition duration-200 ease-in">
+            <input type="checkbox" id="autoAggressiveSites" 
+                   class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer"/>
+            <label for="autoAggressiveSites" 
+                   class="toggle-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer"></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    
     <p
       id="status"
       class="text-sm text-gray-500 dark:text-gray-300 text-center"

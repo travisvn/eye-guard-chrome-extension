@@ -15,6 +15,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const aggressiveModeToggle = document.getElementById('alwaysOnAggressiveMode') as HTMLInputElement;
 
+  // New elements
+  const colorPresets = document.querySelectorAll('.color-preset') as NodeListOf<HTMLButtonElement>;
+  const sensitivitySlider = document.getElementById('sensitivitySlider') as HTMLInputElement;
+  const sensitivityValue = document.getElementById('sensitivityValue') as HTMLSpanElement;
+  const suggestedSitesEnabled = document.getElementById('suggestedSitesEnabled') as HTMLInputElement;
+  const autoAggressiveSites = document.getElementById('autoAggressiveSites') as HTMLInputElement;
+  const suggestedSiteNotification = document.getElementById('suggestedSiteNotification') as HTMLDivElement;
+  const addToAggressiveFromSuggestion = document.getElementById('addToAggressiveFromSuggestion') as HTMLButtonElement;
+
   const status = document.getElementById('status') as HTMLParagraphElement;
 
   const darkModeToggle = document.getElementById('darkModeToggle');
@@ -59,12 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const DEFAULT_COLOR = '#cce8cf'; // Default seafoam green color
 
-  chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode'], (data) => {
+  chrome.storage.sync.get([
+    'color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode',
+    'sensitivity', 'suggestedSitesEnabled', 'autoAggressiveSites'
+  ], (data) => {
     colorPicker.value = data.color || DEFAULT_COLOR;
     toggleExtension.checked = data.enabled ?? true;
     excludedSites.value = (data.excludedSites || []).join('\n');
     aggressiveModeSites.value = (data.aggressiveModeSites || []).join('\n');
     aggressiveModeToggle.checked = data.alwaysOnAggressiveMode ?? false;
+    
+    // New settings
+    const sensitivity = data.sensitivity ?? 240;
+    sensitivitySlider.value = sensitivity.toString();
+    sensitivityValue.textContent = sensitivity.toString();
+    suggestedSitesEnabled.checked = data.suggestedSitesEnabled ?? true;
+    autoAggressiveSites.checked = data.autoAggressiveSites ?? false;
   });
 
   // Update the color
@@ -147,4 +166,79 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     });
   });
+
+  // Color presets event listeners
+  colorPresets.forEach((preset) => {
+    preset.addEventListener('click', () => {
+      const color = preset.getAttribute('data-color');
+      if (color) {
+        colorPicker.value = color;
+        chrome.storage.sync.set({ color }, () => {
+          status.textContent = `Color set to ${preset.getAttribute('data-name')}!`;
+          setTimeout(() => (status.textContent = ''), statusTimeout);
+        });
+      }
+    });
+  });
+
+  // Sensitivity slider event listener
+  sensitivitySlider.addEventListener('input', () => {
+    const sensitivity = parseInt(sensitivitySlider.value);
+    sensitivityValue.textContent = sensitivity.toString();
+    chrome.storage.sync.set({ sensitivity }, () => {
+      status.textContent = 'Sensitivity updated!';
+      setTimeout(() => (status.textContent = ''), statusTimeout);
+    });
+  });
+
+  // Suggested sites toggles
+  suggestedSitesEnabled.addEventListener('change', () => {
+    chrome.storage.sync.set({ suggestedSitesEnabled: suggestedSitesEnabled.checked }, () => {
+      status.textContent = 'Suggested sites setting updated!';
+      setTimeout(() => (status.textContent = ''), statusTimeout);
+    });
+  });
+
+  autoAggressiveSites.addEventListener('change', () => {
+    chrome.storage.sync.set({ autoAggressiveSites: autoAggressiveSites.checked }, () => {
+      status.textContent = 'Auto-aggressive mode setting updated!';
+      setTimeout(() => (status.textContent = ''), statusTimeout);
+    });
+  });
+
+  // Add to aggressive from suggestion
+  addToAggressiveFromSuggestion.addEventListener('click', () => {
+    chrome.runtime.sendMessage({ type: 'addCurrentToAggressive' }, (response) => {
+      if (response.status === 'success') {
+        aggressiveModeSites.value += (aggressiveModeSites.value ? '\n' : '') + response.site;
+        suggestedSiteNotification.classList.add('hidden');
+        status.textContent = 'Site added to aggressive mode!';
+        setTimeout(() => (status.textContent = ''), statusTimeout);
+      }
+    });
+  });
+
+  // Check if current site is suggested and show notification
+  function checkSuggestedSiteNotification() {
+    chrome.runtime.sendMessage({ type: 'getSuggestedSiteStatus' }, (response) => {
+      if (response.isSuggested) {
+        chrome.storage.sync.get(['suggestedSitesEnabled', 'aggressiveModeSites'], (data) => {
+          if (data.suggestedSitesEnabled) {
+            const hostname = new URL(response.url).hostname;
+            const aggressiveModeSites = data.aggressiveModeSites || [];
+            const isAlreadyInAggressive = aggressiveModeSites.some((site: string) => 
+              hostname.includes(site) || site.includes(hostname)
+            );
+            
+            if (!isAlreadyInAggressive) {
+              suggestedSiteNotification.classList.remove('hidden');
+            }
+          }
+        });
+      }
+    });
+  }
+
+  // Check for suggested site notification on popup open
+  checkSuggestedSiteNotification();
 });

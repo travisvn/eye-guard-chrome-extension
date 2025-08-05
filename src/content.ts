@@ -1,9 +1,14 @@
-chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode'], (data) => {
+chrome.storage.sync.get([
+  'color', 'enabled', 'excludedSites', 'aggressiveModeSites', 'alwaysOnAggressiveMode', 
+  'sensitivity', 'autoAggressiveSites'
+], (data) => {
   const userColor = data.color || '#cce8cf';
   const isEnabled = data.enabled ?? true;
   const excludedSites = data.excludedSites || [];
   const aggressiveModeSites = data.aggressiveModeSites || [];
   const alwaysOnAggressiveMode = data.alwaysOnAggressiveMode ?? false;
+  const sensitivity = data.sensitivity ?? 240;
+  const autoAggressiveSites = data.autoAggressiveSites ?? false;
 
   if (!isEnabled || excludedSites.some((site) => window.location.href.includes(site))) {
     console.log('Eye Guard is disabled or this site is excluded.');
@@ -13,7 +18,7 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
   // Enhanced configuration
   const CONFIG = {
     targetColor: userColor,
-    lightThreshold: [240, 240, 240],
+    lightThreshold: [sensitivity, sensitivity, sensitivity],
     
     primaryElements: [
       'html', 'body', 'main', 'article', 'section', 'aside', 'header', 'footer', 'nav'
@@ -387,8 +392,27 @@ chrome.storage.sync.get(['color', 'enabled', 'excludedSites', 'aggressiveModeSit
     // Initial processing
     setTimeout(() => processAllElements(), 100);
 
+    // Check if current site is in suggested aggressive sites
+    const suggestedSites = [
+      'dash.cloudflare.com', 'developers.cloudflare.com', 'docs.deno.com',
+      'docs.sillytavern.app', 'sillytavern.app', 'uploadthing.com', 'gradio.app',
+      'openwebui.com', 'reddit.com', 'langchain.com', 'hoppscotch.io',
+      'reflex.dev', 'drizzle.team', 'chatgpt.com', 'docs.github.com',
+      'gemini.google.com', 'aistudio.google.com', 'notion.so', 'linear.app',
+      'vercel.com', 'supabase.com'
+    ];
+    
+    const currentHostname = window.location.hostname;
+    const isSuggestedSite = suggestedSites.some(site => 
+      currentHostname === site || currentHostname.endsWith('.' + site)
+    );
+    
+    const shouldUseAggressive = alwaysOnAggressiveMode || 
+      aggressiveModeSites.some((site) => window.location.href.includes(site)) ||
+      (autoAggressiveSites && isSuggestedSite);
+
     // Set up observers for aggressive mode
-    if (alwaysOnAggressiveMode || aggressiveModeSites.some((site) => window.location.href.includes(site))) {
+    if (shouldUseAggressive) {
       console.log('Aggressive mode enabled.');
       setupMutationObserver();
       setupIntersectionObserver();

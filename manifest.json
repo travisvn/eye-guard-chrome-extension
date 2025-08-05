@@ -1,9 +1,9 @@
 {
   "manifest_version": 3,
   "name": "Eye Guard - Reduce Eye Strain",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Replace white backgrounds with a customizable color to reduce eye strain.",
-  "permissions": ["storage", "scripting", "webNavigation"],
+  "permissions": ["storage", "scripting", "webNavigation", "tabs"],
   "host_permissions": ["<all_urls>"],
   "background": {
     "service_worker": "background.js"
