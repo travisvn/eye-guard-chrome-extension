@@ -1,0 +1,18 @@
+// Suggested sites that commonly benefit from aggressive mode
+export const SUGGESTED_AGGRESSIVE_SITES = [
+  'dash.cloudflare.com',
+  'developers.cloudflare.com',
+  'docs.deno.com',
+  'gradio.app',
+  'reddit.com',
+  'drizzle.team',
+  'chatgpt.com',
+  'docs.github.com',
+  'gemini.google.com',
+  'aistudio.google.com',
+  'notion.so',
+  'linear.app',
+  'vercel.com',
+  'supabase.com',
+  'github.com',
+];

@@ -1,28 +1,4 @@
-// Suggested sites that commonly benefit from aggressive mode
-const SUGGESTED_AGGRESSIVE_SITES = [
-  'dash.cloudflare.com',
-  'developers.cloudflare.com',
-  'docs.deno.com',
-  'docs.sillytavern.app',
-  'sillytavern.app',
-  'uploadthing.com',
-  'gradio.app',
-  'openwebui.com',
-  'reddit.com',
-  'langchain.com',
-  'hoppscotch.io',
-  'reflex.dev',
-  'drizzle.team',
-  'chatgpt.com',
-  'docs.github.com',
-  'gemini.google.com',
-  'aistudio.google.com',
-  'notion.so',
-  'linear.app',
-  'vercel.com',
-  'supabase.com',
-  'github.com',
-];
+import { SUGGESTED_AGGRESSIVE_SITES } from './constants';
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log('Eye Guard installed or updated.');
