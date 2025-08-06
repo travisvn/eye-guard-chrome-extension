@@ -195,10 +195,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const baseUrl = new URL(tabs[0].url).origin;
       chrome.storage.sync.get(['excludedSites'], (data) => {
         const sites = new Set(data.excludedSites || []);
+        if (sites.has(baseUrl)) {
+          status.textContent = 'Site is already in the ignore list!';
+          setTimeout(() => (status.textContent = ''), statusTimeout);
+          return;
+        }
         sites.add(baseUrl);
         chrome.storage.sync.set({ excludedSites: Array.from(sites) }, () => {
           excludedSites.value = Array.from(sites).join('\n');
-          status.textContent = 'Current site added to ignore list!';
+          status.textContent = 'Current site added and saved to ignore list!';
           setTimeout(() => (status.textContent = ''), statusTimeout);
         });
       });
@@ -220,11 +225,17 @@ document.addEventListener('DOMContentLoaded', () => {
       const baseUrl = new URL(tabs[0].url).origin;
       chrome.storage.sync.get(['aggressiveModeSites'], (data) => {
         const sites = new Set(data.aggressiveModeSites || []);
+        if (sites.has(baseUrl)) {
+          status.textContent = 'Site is already in the aggressive mode list!';
+          setTimeout(() => (status.textContent = ''), statusTimeout);
+          return;
+        }
         sites.add(baseUrl);
         chrome.storage.sync.set({ aggressiveModeSites: Array.from(sites) }, () => {
           aggressiveModeSites.value = Array.from(sites).join('\n');
-          status.textContent = 'Current site added to aggressive mode!';
+          status.textContent = 'Current site added and saved to aggressive mode!';
           setTimeout(() => (status.textContent = ''), statusTimeout);
+          hideFloatingNotification(); // Hide notification if it's showing
         });
       });
     });
@@ -289,8 +300,8 @@ document.addEventListener('DOMContentLoaded', () => {
   function checkSuggestedSiteNotification() {
     chrome.runtime.sendMessage({ type: 'getSuggestedSiteStatus' }, (response) => {
       if (response.isSuggested) {
-        chrome.storage.sync.get(['suggestedSitesEnabled', 'aggressiveModeSites'], (data) => {
-          if (data.suggestedSitesEnabled) {
+        chrome.storage.sync.get(['suggestedSitesEnabled', 'aggressiveModeSites', 'alwaysOnAggressiveMode', 'autoAggressiveSites'], (data) => {
+          if (data.suggestedSitesEnabled && !data.alwaysOnAggressiveMode && !data.autoAggressiveSites) {
             const hostname = new URL(response.url).hostname;
             const aggressiveModeSites = data.aggressiveModeSites || [];
             const isAlreadyInAggressive = aggressiveModeSites.some((site: string) => 

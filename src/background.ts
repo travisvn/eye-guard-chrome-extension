@@ -63,8 +63,8 @@ function updateBadgeForTab(tabId: number, url: string): void {
     return;
   }
 
-  chrome.storage.sync.get(['suggestedSitesEnabled', 'aggressiveModeSites', 'autoAggressiveSites'], (data) => {
-    if (!data.suggestedSitesEnabled) {
+  chrome.storage.sync.get(['suggestedSitesEnabled', 'aggressiveModeSites', 'autoAggressiveSites', 'alwaysOnAggressiveMode'], (data) => {
+    if (!data.suggestedSitesEnabled || data.alwaysOnAggressiveMode || data.autoAggressiveSites) {
       chrome.action.setBadgeText({ text: '', tabId });
       return;
     }

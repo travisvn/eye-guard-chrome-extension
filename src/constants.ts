@@ -15,4 +15,13 @@ export const SUGGESTED_AGGRESSIVE_SITES = [
   'vercel.com',
   'supabase.com',
   'github.com',
+  'mail.google.com',
+  'calendar.google.com',
+  'drive.google.com',
+  'photos.google.com',
+  'docs.google.com',
+  'sheets.google.com',
+  'slides.google.com',
+  'meet.google.com',
+  'classroom.google.com',
 ];
